@@ -1,7 +1,7 @@
 version: '3'
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: zookeeper
     hostname: zookeeper
     ports:
       - "2181:2181"
@@ -52,6 +52,18 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: kafka3
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kafka-manager:
+    image: kafkamanager/kafka-manager
+    hostname: kafka-manager
+    ports:
+      - "9000:9000"
+    networks:
+      - kafka-cluster
+    environment:
+      ZK_HOSTS: zookeeper
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
